@@ -1,0 +1,34 @@
+{
+  "name": "charoo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.22"
+  },
+  "scripts": {
+    "dev": "concurrently -n api,web 'npm run dev -w @charoo/api' 'npm run dev -w @charoo/web'",
+    "build": "npm run build -w @charoo/contracts && npm run build -w @charoo/api && npm run build -w @charoo/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "db:migrate": "npm run migrate -w @charoo/api",
+    "admin:grant": "npm run admin:grant -w @charoo/api",
+    "setup": "node scripts/setup.mjs",
+    "test:browser": "playwright test",
+    "format": "prettier --write apps packages scripts docs README.md *.json *.yaml playwright.config.ts"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "@playwright/test": "^1.63.0",
+    "@types/supertest": "^6.0.3",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.9.9",
+    "supertest": "^7.1.4",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

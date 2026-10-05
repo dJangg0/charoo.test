@@ -1,0 +1,34 @@
+{
+  "name": "@charoo/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file=../../.env src/server.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx src/server.ts",
+    "migrate": "tsx --env-file=../../.env src/migrate.ts",
+    "admin:grant": "tsx --env-file=../../.env src/grant-admin.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.922.0",
+    "@aws-sdk/s3-request-presigner": "^3.922.0",
+    "@charoo/contracts": "*",
+    "cookie": "^1.0.2",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.8.2",
+    "livekit-server-sdk": "^2.14.2",
+    "nodemailer": "^10.0.14",
+    "pg": "^8.16.3",
+    "tsx": "^4.20.6",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/nodemailer": "^7.0.2",
+    "@types/pg": "^8.15.6",
+    "@types/ws": "^8.18.1"
+  }
+}
