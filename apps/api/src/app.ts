@@ -1021,11 +1021,12 @@ export function app(ctx: Context) {
     res.sendStatus(204);
   });
   app.get("/api/reconnect", async (_req, res) => {
+    requireThat(res.locals.user.verified, 403, "Verify your email first");
     const id = res.locals.user.id;
     res.json(
       (
         await ctx.db.query(
-          "SELECT u.id,u.display_name,h.matched_at FROM match_history h JOIN users u ON u.id=CASE WHEN h.user_a=$1 THEN h.user_b ELSE h.user_a END WHERE (h.user_a=$1 OR h.user_b=$1) AND u.verified=true ORDER BY h.matched_at DESC LIMIT 30",
+          "SELECT u.id,u.display_name,h.matched_at FROM match_history h JOIN users u ON u.id=CASE WHEN h.user_a=$1 THEN h.user_b ELSE h.user_a END WHERE (h.user_a=$1 OR h.user_b=$1) AND u.verified=true AND u.banned=false AND (u.suspended_until IS NULL OR u.suspended_until<=now()) AND NOT EXISTS(SELECT 1 FROM blocks b WHERE (b.user_id=$1 AND b.target_id=u.id) OR (b.target_id=$1 AND b.user_id=u.id)) ORDER BY h.matched_at DESC LIMIT 30",
           [id],
         )
       ).rows,

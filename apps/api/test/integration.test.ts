@@ -328,6 +328,22 @@ describe("reliable private messaging and matching", () => {
     expect((await post(a, "/match", {})).body.queued).toBe(true);
     expect((await post(b, "/match", {})).body.queued).toBe(true);
   });
+  it("limits reconnect to verified users and hides blocked previous matches", async () => {
+    const guestUser = await guest();
+    expect((await guestUser.agent.get("/api/reconnect")).status).toBe(403);
+
+    const a = await verified();
+    const b = await verified();
+    expect((await post(a, "/match", {})).body.queued).toBe(true);
+    expect((await post(b, "/match", {})).status).toBe(200);
+    expect((await a.agent.get("/api/reconnect")).body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: b.user.id })]),
+    );
+
+    await post(a, "/blocks", { targetId: b.user.id });
+    expect((await a.agent.get("/api/reconnect")).body).toEqual([]);
+    expect((await b.agent.get("/api/reconnect")).body).toEqual([]);
+  });
   it("only reveals opted-in ASL after balanced qualifying participation and duration", async () => {
     const { a, b, id } = await pair();
     await db.query(

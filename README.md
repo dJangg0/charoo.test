@@ -6,7 +6,7 @@ An installable, responsive PWA for ephemeral stranger chat and social discovery,
 
 ## Start locally with Docker
 
-Requires Node.js 22.12+ and Docker Compose.
+Requires Node.js 22.22+ and Docker Compose.
 
 ```sh
 npm ci
