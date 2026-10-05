@@ -174,7 +174,7 @@ export function App() {
       api("/conversations"),
       api("/requests"),
       api("/contacts"),
-      api("/reconnect"),
+      userRef.current?.verified ? api("/reconnect") : Promise.resolve([]),
       api("/blocks"),
       api("/calls"),
     ]);
